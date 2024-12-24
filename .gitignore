@@ -1,0 +1,21 @@
+# Ignore the virtual environment folder
+credit-risk-env/
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore temporary files and logs
+*.log
+*.tmp
+
+# Ignore Jupyter Notebook checkpoints (if applicable)
+.ipynb_checkpoints/
+
+# Ignore VS Code workspace settings (optional)
+.vscode/
+
+# Ignore environment configuration files
+.env
