@@ -8,14 +8,15 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="mt-5">Credit Risk Analysis Tool</h1>
+        <h1 class="mt-5">Stock Insights</h1>
 
         <!-- Form for ticker and date range -->
         <form method="POST" action="/">
             <div class="form-group">
-                <label for="ticker">Ticker Symbol:</label>
+                <label for="ticker">Ticker Symbol (Uppercase only):</label>
                 <input type="text" class="form-control" id="ticker" name="ticker" required>
             </div>
+            <!--TODO: Error check for dates (make sure end date is not greater than start date, make sure no date is past current date)-->
             <div class="form-group">
                 <label for="start_date">Start Date (YYYY-MM-DD):</label>
                 <input type="date" class="form-control" id="start_date" name="start_date" required>

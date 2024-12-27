@@ -65,6 +65,7 @@ def plot_results(analysis_results):
     plt.savefig(img, format='png')
     img.seek(0)
 
+    #TODO: When the timeframe between start and end dates is too small (within the same year for example), the x axis formatting is messed up
     # Convert the plot to a base64-encoded string for embedding in the HTML
     plot_url = base64.b64encode(img.getvalue()).decode('utf-8')
     return f"data:image/png;base64,{plot_url}"
