@@ -3,8 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Credit Risk Analysis</title>
+    <title>Stock Insights</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .analysis-buttons {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: start;
+        }
+        .analysis-buttons button {
+            margin-bottom: 10px;
+        }
+        .plot-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -13,10 +29,11 @@
         <!-- Form for ticker and date range -->
         <form method="POST" action="/">
             <div class="form-group">
+                <!-- TODO: A dropdown style of autofill where if someone types "IB" all the ticker symbols starting with these letters will show up to be selected-->
                 <label for="ticker">Ticker Symbol (Uppercase only):</label>
                 <input type="text" class="form-control" id="ticker" name="ticker" required>
             </div>
-            <!--TODO: Error check for dates (make sure end date is not greater than start date, make sure no date is past current date)-->
+            <!-- TODO: Error check for dates (make sure end date is not greater than start date, make sure no date is past current date) -->
             <div class="form-group">
                 <label for="start_date">Start Date (YYYY-MM-DD):</label>
                 <input type="date" class="form-control" id="start_date" name="start_date" required>
@@ -36,11 +53,34 @@
         {% endif %}
 
         {% if plot_url %}
-            <h3 class="mt-5">Cumulative Returns Plot</h3>
-            <img src="{{ plot_url }}" alt="Cumulative Returns Plot" class="img-fluid">
+            <div class="plot-container mt-5">
+                <div>
+                    <h3>Cumulative Returns for {{ ticker }}</h3>
+                    <img src="{{ plot_url }}" alt="Cumulative Returns Plot" class="img-fluid">
+                </div>
+                <div class="analysis-buttons ml-3">
+                    <form action="/regression" method="GET">
+                        <input type="hidden" name="ticker" value="{{ ticker }}">
+                        <input type="hidden" name="start_date" value="{{ start_date }}">
+                        <input type="hidden" name="end_date" value="{{ end_date }}">
+                        <button type="submit" class="btn btn-outline-primary">Future Projections</button>
+                    </form>
+                    <form action="/hypothesis" method="GET">
+                        <input type="hidden" name="ticker" value="{{ ticker }}">
+                        <input type="hidden" name="start_date" value="{{ start_date }}">
+                        <input type="hidden" name="end_date" value="{{ end_date }}">
+                        <button type="submit" class="btn btn-outline-secondary">Test My Investment Claims</button>
+                    </form>
+                </div>
+            </div>
         {% endif %}
 
         {% if table_html %}
+            <!-- TODO: Add a "show more" button so that at first only a few lines of data are visible to the user but if they want to see another 'x'
+            number of lines they can -->
+            <!-- TODO: Add the option to sort the data in ascending/descending date or ascending/descending daily returns -->
+            <!-- TODO: Put the full company name instead of the ticker symbol -->
+            <!-- TODO: Add a section called "About [insert company name] to get a description of what the company does" -->
             <h3 class="mt-5">Analysis Table for {{ ticker }}</h3>
             <div>{{ table_html | safe }}</div>
         {% endif %}

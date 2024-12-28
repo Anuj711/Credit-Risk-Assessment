@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regression Analysis</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Regression Analysis</h1>
+
+        {% if regression_results %}
+            <h3>Results for {{ ticker }}</h3>
+            
+            <!-- Display regression plot -->
+            {% if regression_results.plot_url %}
+                <img src="{{ regression_results.plot_url }}" alt="Regression Plot" class="img-fluid">
+            {% endif %}
+
+            <!-- Display regression details -->
+            <div class="mt-4">
+                {% if regression_results.error %}
+                    <p class="text-danger">{{ regression_results.error }}</p>
+                {% else %}
+                    <p><strong>Regression Equation:</strong> y = {{ regression_results.slope|round(4) }}x + {{ regression_results.intercept|round(4) }}</p>
+                    <p><strong>R² Value:</strong> {{ regression_results.r_squared|round(4) }}</p>
+                {% endif %}
+            </div>
+        {% else %}
+            <p>No regression results available. Please go back and try again.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
