@@ -90,18 +90,20 @@ def perform_regression_analysis(data):
         model.fit(dates, closing_prices)
         predictions = model.predict(dates)
 
-        # Regression details
-        slope = model.coef_[0][0]
-        intercept = model.intercept_[0]
-        r_squared = model.score(dates, closing_prices)
+        # Resample data for better visualization if the timeframe is large
+        if len(data) > 365:  # More than a year's worth of data
+            data = data.set_index('Date').resample('M').mean().reset_index()  # Resample to monthly averages
+            dates = (data['Date'] - data['Date'].min()).dt.days.values.reshape(-1, 1)
+            closing_prices = data['Close'].values.reshape(-1, 1)
+            predictions = model.predict(dates)
 
         # Generate regression plot
-        fig, ax = plt.subplots()
-        ax.plot(data['Date'], closing_prices, label='Actual Prices', color='blue')
-        ax.plot(data['Date'], predictions, label='Regression Line', color='red')
+        fig, ax = plt.subplots(figsize=(12, 6))  # Larger graph
+        ax.scatter(data['Date'], closing_prices, label='Actual Prices', color='blue', alpha=0.6)  # Scatter plot
+        ax.plot(data['Date'], predictions, label='Regression Line', color='red')  # Regression line
         ax.set(xlabel='Date', ylabel='Closing Price', title='Regression Analysis')
-
         ax.legend()
+
         img = io.BytesIO()
         plt.savefig(img, format='png')
         img.seek(0)
@@ -109,13 +111,16 @@ def perform_regression_analysis(data):
         plt.close()
 
         return {
-            "slope": slope,
-            "intercept": intercept,
-            "r_squared": r_squared,
+            "slope": model.coef_[0][0],
+            "intercept": model.intercept_[0],
+            "r_squared": model.score(dates, closing_prices),
             "plot_url": f"data:image/png;base64,{plot_url}"
         }
     except Exception as e:
         return {"error": f"Regression analysis failed: {e}"}
+
+
+
 
 def plot_results(analysis_results):
     fig, ax = plt.subplots()
