@@ -25,6 +25,12 @@
                 {% else %}
                     <p><strong>Regression Equation:</strong> y = {{ regression_results.slope|round(4) }}x + {{ regression_results.intercept|round(4) }}</p>
                     <p><strong>R² Value:</strong> {{ regression_results.r_squared|round(4) }}</p>
+                    <!-- TODO: Add a feature where if the R^2 value is above a certain value (0.7 means strong correlation), 
+                    a new field is given to the user where they can input a desired date (anything above the start date is acceptable) 
+                    and the app will output the estimated closing price at that date. If the correlation value is not high enough,
+                    a message will be given to the user that says "correlation is not strong enough to accurately project or interpolate data"-->
+                    
+
                 {% endif %}
             </div>
         {% else %}
