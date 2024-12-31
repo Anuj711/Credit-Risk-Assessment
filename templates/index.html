@@ -59,7 +59,7 @@
                     <img src="{{ plot_url }}" alt="Cumulative Returns Plot" class="img-fluid">
                 </div>
                 <div class="analysis-buttons ml-3">
-                    <form action="/regression" method="GET">
+                    <form action="/regression" method="POST">
                         <input type="hidden" name="ticker" value="{{ ticker }}">
                         <input type="hidden" name="start_date" value="{{ start_date }}">
                         <input type="hidden" name="end_date" value="{{ end_date }}">
