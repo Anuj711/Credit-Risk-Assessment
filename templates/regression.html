@@ -3,39 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Regression Analysis</title>
+    <title>Time Series Analysis</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body>
-    <div class="container">
-        <h1 class="mt-5">Regression Analysis</h1>
+    {% if regression_results %}
+        <h3>Time Series Analysis Results for {{ ticker }}</h3>
 
-        {% if regression_results %}
-            <h3>Results for {{ ticker }}</h3>
-            
-            <!-- Display regression plot -->
-            {% if regression_results.plot_url %}
-                <img src="{{ regression_results.plot_url }}" alt="Regression Plot" class="img-fluid">
-            {% endif %}
-
-            <!-- Display regression details -->
-            <div class="mt-4">
-                {% if regression_results.error %}
-                    <p class="text-danger">{{ regression_results.error }}</p>
-                {% else %}
-                    <p><strong>Regression Equation:</strong> y = {{ regression_results.slope|round(4) }}x + {{ regression_results.intercept|round(4) }}</p>
-                    <p><strong>R² Value:</strong> {{ regression_results.r_squared|round(4) }}</p>
-                    <!-- TODO: Add a feature where if the R^2 value is above a certain value (0.7 means strong correlation), 
-                    a new field is given to the user where they can input a desired date (anything above the start date is acceptable) 
-                    and the app will output the estimated closing price at that date. If the correlation value is not high enough,
-                    a message will be given to the user that says "correlation is not strong enough to accurately project or interpolate data"-->
-                    
-
-                {% endif %}
-            </div>
-        {% else %}
-            <p>No regression results available. Please go back and try again.</p>
+        <!-- Display regression plot -->
+        {% if regression_results.plot_url %}
+            <img src="{{ regression_results.plot_url }}" alt="Regression Plot" class="img-fluid">
         {% endif %}
-    </div>
-</body>
-</html>
+
+        <!-- Display regression details -->
+        <div class="mt-4">
+            {% if regression_results.error %}
+                <p class="text-danger">{{ regression_results.error }}</p>
+            {% else %}
+                <p><strong>Regression Equation:</strong> y = {{ regression_results.slope|round(4) }}x + {{ regression_results.intercept|round(4) }}</p>
+                <p><strong>R² Value:</strong> {{ regression_results.r_squared|round(4) }}</p>
+
+                <!-- Show future prediction input if R^2 is high -->
+                {% if regression_results.allow_future_prediction %}
+                    <form method="POST" action="/future-prediction">
+                        <div class="form-group">
+                            <label for="future_date">Enter a future date (YYYY-MM-DD):</label>
+                            <input type="date" class="form-control" id="future_date" name="future_date" required>
+                            <input type="hidden" name="slope" value="{{ regression_results.slope }}">
+                            <input type="hidden" name="intercept" value="{{ regression_results.intercept }}">
+                            <input type="hidden" name="start_date" value="{{ start_date }}">
+                        </div>
+                        <button type="submit" class="btn btn-success">Predict Closing Price</button>
+                    </form>
+                {% endif %}
+            {% endif %}
+        </div>
+    {% else %}
+        <p>No regression results available. Please go back and try again.</p>
+    {% endif %}
