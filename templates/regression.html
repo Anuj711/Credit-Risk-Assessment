@@ -33,6 +33,8 @@
                         </div>
                         <button type="submit" class="btn btn-success">Predict Closing Price</button>
                     </form>
+                {% else %}
+                    <p><strong>Correlation is not strong enough to use linear regression model for an accurate prediction, R² value must be at least 0.7.</strong></p>
                 {% endif %}
             {% endif %}
         </div>
