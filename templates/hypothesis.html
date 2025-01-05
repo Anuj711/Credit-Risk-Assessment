@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hypothesis Testing</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Hypothesis Testing</h1>
+
+        {% if error %}
+            <div class="alert alert-danger">{{ error }}</div>
+        {% endif %}
+
+        {% if hypothesis_results %}
+            <h2>Results for {{ ticker }}</h2>
+            <p><strong>Null Hypothesis (H0):</strong> The average daily returns = 0 </p>
+            <p><strong>Alternative Hypothesis (H1):</strong> The daily returns are either greater or less than 0</p>
+            <p><strong>Signifiance level: </strong> 5% </p>
+            <p><strong>T-Statistic:</strong> {{ hypothesis_results.t_statistic }}</p>
+            <p><strong>P-Value:</strong> {{ hypothesis_results.p_value }}</p>
+            <p><strong>Significant at 5% level?</strong>
+                {% if hypothesis_results.is_significant %}
+                    <span class="text-success"> Yes</span>
+                    <p><strong>What does this mean to me?</strong>
+                    <p>The p-value was {{ hypothesis_results.p_value }} which is less than 0.05. This means the result is statistically significant.<br></p>
+                    <p>The null hypotheis can be rejected which means that there is a genuine trend occuring that is leading to the stock moving up or down.</p>
+                    <p>Due to this, you should look closer at the trend and investigate why a trend is forming. You can then re-evaluate your investment decision.</p>
+                {% else %}
+                    <span class="text-danger"> No</span>
+                    <p><strong>What does this mean to me?</strong>
+                    <p>The p-value was {{ hypothesis_results.p_value }} which is greater than 0.05. This means the result is not statistically significant.<br></p>
+                    <p>The null hypotheis cannot be rejected which means that there are no significant trends occuring in the stock, as the cumulative returns are close to stagnant.</p>
+                    <p>Due to this, you can just wait for more data to come out and see if there is any sign of a trend.</p>
+                {% endif %}
+            </p>
+        {% else %}
+            <p>No results available. Please go back and try again.</p>
+        {% endif %}
+
+        <a href="/" class="btn btn-primary">Back to Home</a>
+    </div>
+</body>
+</html>

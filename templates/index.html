@@ -63,13 +63,16 @@
                         <input type="hidden" name="ticker" value="{{ ticker }}">
                         <input type="hidden" name="start_date" value="{{ start_date }}">
                         <input type="hidden" name="end_date" value="{{ end_date }}">
-                        <button type="submit" class="btn btn-outline-primary">Future projections and time series analysis</button>
+                        <button type="submit" class="btn btn-primary">Future projections and time series analysis</button>
                     </form>
                     <form action="/hypothesis" method="GET">
                         <input type="hidden" name="ticker" value="{{ ticker }}">
                         <input type="hidden" name="start_date" value="{{ start_date }}">
                         <input type="hidden" name="end_date" value="{{ end_date }}">
-                        <button type="submit" class="btn btn-outline-secondary">Test my investment claims with hypothesis testing</button>
+                        <a href="/hypothesis?ticker={{ ticker }}&start_date={{ start_date }}&end_date={{ end_date }}" class="btn btn-secondary">
+                            Test My Investment Claims with Hypothesis Testing
+                        </a>
+                        
                     </form>
                 </div>
             </div>

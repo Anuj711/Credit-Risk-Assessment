@@ -7,6 +7,8 @@ from datetime import datetime
 import yfinance as yf
 import numpy as np
 from sklearn.linear_model import LinearRegression
+from scipy.stats import ttest_1samp
+
 
 app = Flask(__name__)
 
@@ -98,6 +100,45 @@ def future_prediction():
         return render_template('future_prediction.html', future_date=future_date, predicted_price=predicted_price)
     except Exception as e:
         return f"Prediction failed: {e}"
+
+@app.route('/hypothesis', methods=['GET', 'POST'])
+def hypothesis():
+    try:
+        # Get ticker and date range from query parameters
+        ticker = request.args.get('ticker')
+        start_date = request.args.get('start_date')
+        end_date = request.args.get('end_date')
+
+        # Validate inputs
+        if not ticker or not start_date or not end_date:
+            return render_template('hypothesis.html', error="Ticker, start date, or end date is missing.")
+
+        # Fetch stock data
+        data = fetch_stock_data(ticker, start_date, end_date)
+        if data is None or data.empty:
+            return render_template('hypothesis.html', error="Unable to fetch data for the given inputs.")
+
+        # Perform hypothesis testing
+        data['Daily Returns'] = data['Close'].pct_change().dropna()
+        t_statistic, p_value = ttest_1samp(data['Daily Returns'].dropna(), 0)
+
+        # Check for NaN results
+        if pd.isna(t_statistic) or pd.isna(p_value):
+            return render_template('hypothesis.html', error="Insufficient data to perform hypothesis testing.")
+
+        # Format results
+        hypothesis_results = {
+            "t_statistic": round(t_statistic, 4),
+            "p_value": round(p_value, 4),
+            "is_significant": p_value < 0.05  # Using 5% as the significance level
+        }
+
+        return render_template('hypothesis.html', hypothesis_results=hypothesis_results, ticker=ticker,
+                               start_date=start_date, end_date=end_date)
+
+    except Exception as e:
+        print(f"Error in hypothesis testing: {e}")
+        return render_template('hypothesis.html', error="An error occurred during hypothesis testing.")
 
 
 def predict_closing_price_at_date(data, regression_results, desired_date):
