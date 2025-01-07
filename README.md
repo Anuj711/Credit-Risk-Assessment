@@ -2,7 +2,7 @@
 
 ## Stock Analysis and Prediction Tool
 
-This web application allows users to analyze stock performance, test hypotheses about daily stock returns, and predict future stock prices. It is built using Python, Flask, and integrates data scraping, statistical analysis, and machine learning models for stock analysis.
+This web application allows users to analyze stock performance, test hypotheses about daily stock returns, and predict future stock prices. It is built using Python, Flask, and integrates data scraping, time series analysis, linear regression, and hypothesis testing for stock analysis.
 
 ### Features
 
